@@ -1,5 +1,8 @@
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
-use sqlx::sqlite::SqlitePoolOptions;
+use r2d2_sqlite::{self, SqliteConnectionManager};
+
+mod db;
+use db::{Pool};
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -8,8 +11,12 @@ async fn hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    let manager = SqliteConnectionManager::file("data.db");
+    let pool = Pool::new(manager).unwrap();
+
+    HttpServer::new(move || {
         App::new()
+            .data(pool.clone())
             .service(hello)
     })
     .bind("127.0.0.1:8080")?
