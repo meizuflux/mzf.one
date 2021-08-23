@@ -1,4 +1,5 @@
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+use sqlx::sqlite::SqlitePoolOptions;
 
 #[get("/")]
 async fn hello() -> impl Responder {
