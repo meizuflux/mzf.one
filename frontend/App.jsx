@@ -14,19 +14,20 @@ function App() {
     }
 
     return (
-      <div>
-        <form onSubmit={registerUrl}>
-            <input type="text" ref={url} />
-            <input type="text" ref={key} />
-            <input type="submit" value="Create Shortened URL" />
-        </form>
+        <>
+            <p>why</p>
+            <form onSubmit={registerUrl}>
+                <input type="text" ref={url} />
+                <input type="text" ref={key} />
+                <input type="submit" value="Create Shortened URL" />
+            </form>
 
-        <div>
-            <ul>
-                {created.map(_url => <li>{_url}</li>)}
-            </ul>
-        </div>
-      </div>
+            <div>
+                <ul>
+                    {created.map(_url => <li>{_url}</li>)}
+                </ul>
+            </div>
+        </>
     );
   }
   
