@@ -16,18 +16,13 @@ function App() {
     }
 
     return (
-        <div>
-            <p>Hello tailwind!</p>
-            <form onSubmit={registerUrl}>
-                <input type="text" ref={url} onChange={e => setValid(false)}/>
-                <input type="submit" value="Shorten URL" />
-            </form>
-
-            <ul>
-                {created().map(i => (<a><li>{i}</li></a>))}
-            </ul>
-            
+        <div class="w-full px-6 mx-auto sm:max-w-screen-sm lg:max-w-screen-xl">
+            <div class="relative text-gray-700">
+                <input class="w-full h-10 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline" type="text" placeholder="Regular input"/>
+                <button class="absolute inset-y-0 right-0 flex items-center px-4 font-bold text-white bg-indigo-600 rounded-r-lg hover:bg-indigo-500 focus:bg-indigo-700">Click</button>
+            </div>
         </div>
+        
     );
 }
 

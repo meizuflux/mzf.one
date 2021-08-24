@@ -3,7 +3,6 @@ import solidPlugin from "vite-plugin-solid";
 import WindiCSS from "vite-plugin-windicss"
 
 export default defineConfig({
-    root: "frontend",
     plugins: [
         solidPlugin(),
         WindiCSS({
@@ -14,6 +13,6 @@ export default defineConfig({
     ],
     build: {
         target: "esnext",
-        outDir: "../dist"
+        polyfillDynamicImport: false,
     },
 });
