@@ -27,6 +27,13 @@ function App() {
                 <p class="secondary-text">
                     A simple, privacy respecting url shortner
                 </p>
+
+                <div class="inputer">
+                    <form onSubmit={registerUrl}>
+                        <input class="url" type="text" ref={url} placeholder="https://example.com"/>
+                        <button class="submit-button" type="submit">Shorten</button>
+                    </form>
+                </div>
             </div>
             
 
