@@ -1,3 +1,5 @@
+import "./curves.css"
+
 import { createSignal } from "solid-js"
 
 function App() {
@@ -16,11 +18,18 @@ function App() {
     }
 
     return (
-        <div class="w-full px-6 mx-auto sm:max-w-screen-sm lg:max-w-screen-xl">
-            <div class="relative text-gray-700">
-                <input class="w-full h-10 pl-3 pr-8 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline" type="text" placeholder="Regular input"/>
-                <button class="absolute inset-y-0 right-0 flex items-center px-4 font-bold text-white bg-indigo-600 rounded-r-lg hover:bg-indigo-500 focus:bg-indigo-700">Click</button>
+        <div>
+
+            <div class="centered">
+                <h1 class="main-title">
+                    mzf.one
+                </h1>
+                <p class="secondary-text">
+                    A simple, privacy respecting url shortner
+                </p>
             </div>
+            
+
         </div>
         
     );
