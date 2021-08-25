@@ -2,33 +2,43 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    color: white;
-    overflow-x: hidden;
 }
 
 .centered {
-    margin: auto;
-    width: 50%
+    margin: 0 auto;
+    max-width: 60%
 }
 
 .main-title {
-    margin: 0 auto;
 
     font-family: Roboto;
-    font-size: 12vw;
-    margin-bottom: 1.5rem;
+    font-size: 10vw;
     text-align: center;
 
     color: #000000;
 }
 
 .secondary-text {
-    margin: 0 auto;
 
     font-family: Roboto;
-    font-size: 5vw;
-    margin-bottom: 5vw;
+    font-size: 3vmin;
     text-align: center;
 
     color: #000000;
 }
+
+.inputer {
+    width: 50%;
+    margin: 0 auto;
+    justify-content: space-between;
+    outline: 1px solid black;
+}
+
+.url {
+
+}
+
+.submit-button {
+
+}
+
