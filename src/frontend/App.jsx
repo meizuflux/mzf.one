@@ -1,6 +1,4 @@
-import "./curves.css"
-
-import { createSignal } from "solid-js"
+import { createSignal, createEffect } from "solid-js"
 
 function App() {
     const [created, setCreated] = createSignal([])
@@ -14,34 +12,46 @@ function App() {
     const registerUrl = (e) => {
         e.preventDefault()
 
-        if (!valid) {
+        let temp = url.value
+
+        if (!temp.startsWith("https://") || !temp.startsWith("http://")) {
+            temp = "http://" + temp
+        }
+
+        if (!temp.match(re)) {
+            setValid(false)
             return
         }
 
-        
         setCreated([...created(), "mzf.one/" + key])
-        console.log(created())
+        if (valid() == false) {
+            setValid(true)
+        }
     }
 
     return (
-        <div class="container">
+        <div class="container-lg">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 text-center">
+                    <h1 class="">
+                        mzf.one
+                    </h1>
+                    <p class="">
+                        A simple, privacy respecting url shortner
+                    </p>
 
-            <h1 class="main-title no-margin">
-                mzf.one
-            </h1>
-            <p class="secondary-text no-margin">
-                A simple, privacy respecting url shortner
-            </p>
-
-            <div class="inputer">
-                <div>
                     <form onSubmit={registerUrl}>
-                        <input class="url" type="text" ref={url} placeholder="https://example.com" onChange={() => setValid(url.value.match(re))}/>
-                        <button class="submit-button" type="submit">Shorten</button>
-                        {!valid() ? <p>Please enter a valid URL.</p> : ""}
+                        <div class="input-group mb-3">
+                            <input type="text" class={`form-control${valid() == false ? ' is-invalid' : ""}`} id="floatingInputInvalid" placeholder="https://example.com" ref={url} />
+                            <button class="btn btn-outline-primary" type="submit">Shorten</button>
+                        </div>
                     </form>
+                    
                 </div>
+                
             </div>
+
+            
             
 
         </div>
