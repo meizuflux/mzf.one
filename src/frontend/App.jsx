@@ -46,6 +46,20 @@ function App() {
                             <button class="btn btn-outline-primary" type="submit">Shorten</button>
                         </div>
                     </form>
+
+                    <div class="container shadow p-3 mb-5 bg-white rounded">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                https://google.com
+                            </div>
+                            <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
+                                <a href="/1234">mzf.one/1234</a>
+                            </div>
+                            <div class="col align-items-right">
+                                <button class="btn btn-primary">Copy</button>
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
                 
