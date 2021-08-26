@@ -1,44 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap');
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Zilla Slab', serif;
 }
 
-.centered {
-    margin: 0 auto;
-    max-width: 60%
+h1 {
+    letter-spacing: .035rem;
+    line-height: 1.2;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .main-title {
-
-    font-family: Roboto;
+    padding-top: 10%;
     font-size: 10vw;
-    text-align: center;
 
     color: #000000;
+    padding-bottom: 5rem;
 }
 
 .secondary-text {
 
-    font-family: Roboto;
-    font-size: 3vmin;
-    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
 
     color: #000000;
+    padding-bottom: 7vh;
 }
 
-.inputer {
-    width: 50%;
-    margin: 0 auto;
-    justify-content: space-between;
-    outline: 1px solid black;
+.no-margin {
+    line-height: 0;
+    margin: 0;
 }
 
-.url {
 
+
+@media (max-width: 768px) {
+    .secondary-text {
+        font-size: 20px;
+    }
+
+    .main-title {
+        font-size: 73px;
+    }
 }
 
-.submit-button {
+@media (max-width: 480px) {
+    .secondary-text {
+        font-size: 15.5px;
+        padding-bottom: 5vh;
+    }
 
+    .main-title {
+        font-size: 73px;
+        padding-bottom: 2.5rem;
+    }
 }
+
+
 
