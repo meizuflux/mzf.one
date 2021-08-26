@@ -1,0 +1,4 @@
+CREATE TABLE urls (
+    key TEXT PRIMARY KEY,
+    url TEXT UNIQUE
+)
