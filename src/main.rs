@@ -1,10 +1,13 @@
-use actix_web::{get, post, web, App, HttpServer, Result};
-use actix_files::{NamedFile, Files};
-use r2d2_sqlite::{self, SqliteConnectionManager};
-use serde::Deserialize;
+#[macro_use]
+extern crate log;
 
-mod db;
-use db::{Pool};
+use actix_web::{get, post, web, App, HttpServer, Result};
+use anyhow;
+use actix_files::{NamedFile, Files};
+use sqlx::sqlite::SqlitePool;
+use serde::Deserialize;
+use dotenv::dotenv;
+use std::env;
 
 #[derive(Deserialize)]
 struct URL {
@@ -17,16 +20,21 @@ async fn index() -> Result<NamedFile> {
 }
 
 #[post("/set")]
-async fn update(_pool: web::Data<Pool>, data: web::Json<URL>) -> Result<String> {
+async fn update(_pool: web::Data<SqlitePool>, data: web::Json<URL>) -> Result<String> {
     
 
     Ok(format!("testurl {}", data.url))
 }
 
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    let manager = SqliteConnectionManager::file("data.db");
-    let pool = Pool::new(manager).unwrap();
+async fn main() -> anyhow::Result<()> {
+    dotenv().ok();
+    env_logger::init();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
+    let pool = SqlitePool::connect(&database_url).await?;
+
+    info!("Running server");
 
     HttpServer::new(move || {
         App::new()
@@ -35,7 +43,9 @@ async fn main() -> std::io::Result<()> {
             .service(update)
             .service(Files::new("/assets", "dist/assets").show_files_listing())
     })
-    .bind("127.0.0.1:8080")?
+    .bind(env::var("ADDR").expect("ADDR is not set in .env file"))?
     .run()
-    .await
+    .await?;
+
+    Ok(())
 }
