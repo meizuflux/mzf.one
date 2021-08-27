@@ -1,17 +1,27 @@
 #[macro_use]
 extern crate log;
 
-use actix_web::{get, post, web, App, HttpServer, Result};
+use actix_web::{get, post, web, App, HttpServer, Result, HttpResponse};
 use anyhow;
 use actix_files::{NamedFile, Files};
 use sqlx::sqlite::SqlitePool;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use dotenv::dotenv;
 use std::env;
+
+use rand::{thread_rng, Rng};
+use rand::distributions::Alphanumeric;
 
 #[derive(Deserialize)]
 struct URL {
     url: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct ShortnerResponse {
+    url: String,
+    key: String,
+    code: i32
 }
 
 #[get("/")]
@@ -20,10 +30,26 @@ async fn index() -> Result<NamedFile> {
 }
 
 #[post("/set")]
-async fn update(_pool: web::Data<SqlitePool>, data: web::Json<URL>) -> Result<String> {
-    
+async fn update(pool: web::Data<SqlitePool>, data: web::Json<URL>) -> Result<HttpResponse> {
+    let key: String = thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(5)
+        .map(char::from)
+        .collect();
 
-    Ok(format!("testurl {}", data.url))
+    sqlx::query!(
+        r#"
+insert into urls (key, url) values ($1, $2)
+        "#,
+        key.to_string(), data.url.to_string()
+    ).execute(pool)
+    .await;
+
+    Ok(HttpResponse::Ok().json(ShortnerResponse {
+        url: data.url.to_string(),
+        key: key.to_string(),
+        code: 200
+    }))
 }
 
 #[actix_web::main]
@@ -41,7 +67,7 @@ async fn main() -> anyhow::Result<()> {
             .data(pool.clone())
             .service(index)
             .service(update)
-            .service(Files::new("/assets", "dist/assets").show_files_listing())
+            .service(Files::new("/", "dist/").show_files_listing())
     })
     .bind(env::var("ADDR").expect("ADDR is not set in .env file"))?
     .run()
