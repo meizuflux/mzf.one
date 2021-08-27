@@ -10,7 +10,7 @@ function App() {
     const key = "1234"
     const domain = "https://mzf.one/"
 
-    const registerUrl = (e) => {
+    const registerUrl = async (e) => {
         e.preventDefault()
 
         let temp = url.value
@@ -24,18 +24,16 @@ function App() {
             return
         }
 
-        setCreated([{url: temp, key: key}, ...created()])
-        if (valid() == false) {
-            setValid(true)
-        }
-
         const resp = await fetch("localhost:8080/set", {
             method: "POST",
             body: JSON.stringify({url: temp})
         })
-        console.log(resp.json())
+        console.log(resp)
 
-        
+        setCreated([{url: temp, key: key}, ...created()])
+        if (valid() == false) {
+            setValid(true)
+        }
     }
 
     const copy = (txt, id) => {
