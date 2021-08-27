@@ -24,16 +24,22 @@ function App() {
             return
         }
 
-        const resp = await fetch("localhost:8080/set", {
+        fetch("http://localhost:8080/set", {
             method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({url: temp})
         })
-        console.log(resp)
+        .then(resp => resp.json())
+        .then(data => {
+            setCreated([{url: temp, key: data.key}, ...created()])
+            if (valid() == false) {
+                setValid(true)
+            }
+        })
 
-        setCreated([{url: temp, key: key}, ...created()])
-        if (valid() == false) {
-            setValid(true)
-        }
+        
     }
 
     const copy = (txt, id) => {
@@ -64,53 +70,54 @@ function App() {
     }
 
     return (
-        <div class="container-lg">
-            <div class="row d-flex justify-content-center pt-5">
-                <div class="col-md-6 text-center pt-5">
-                    <h1 class="display-1 mb-0 custom-font" style="font-weight: 400">
-                        mzf.one
-                    </h1>
-                    <p class="lead custom-font" style="font-size: 1.5rem; font-weight: 400">
-                        A simple, privacy respecting url shortner
-                    </p>
+        <>
+            <div class="container-lg">
+                <div class="row d-flex justify-content-center pt-5">
+                    <div class="col-md-6 text-center pt-5">
+                        <h1 class="display-1 mb-0 custom-font" style="font-weight: 400">
+                            mzf.one
+                        </h1>
+                        <p class="lead custom-font" style="font-size: 1.5rem; font-weight: 400">
+                            A simple, <a href="https://github.com/ppotatoo/rust-api" class="link-primary" style="text-decoration: none">open source</a> privacy respecting url shortner.
+                        </p>
 
-                    <form onSubmit={registerUrl}>
-                        <div class="input-group mb-3">
-                            <input type="text" class={`form-control${valid() == false ? ' is-invalid' : ""}`} id="floatingInputInvalid" placeholder="https://example.com" ref={url} />
-                            <button class="btn btn-secondary" type="submit">Shorten</button>
-                        </div>
-                    </form>
+                        <form onSubmit={registerUrl}>
+                            <div class="input-group mb-3">
+                                <input type="text" class={`form-control${valid() == false ? ' is-invalid' : ""}`} id="floatingInputInvalid" placeholder="https://example.com" ref={url} />
+                                <button class="btn btn-secondary" type="submit">Shorten</button>
+                            </div>
+                        </form>
 
-                    {created().length == 0 ? null :
-                    <div class="container p-3 mb-4 shadow rounded">
-                        {created().map((item, index) => (
-                            <div class={(index == created().length - 1) ? "" : "mb-3"}>
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        {item.url}
-                                    </div>
-                                    <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
-                                        <a href="/1234">{domain}{item.key}</a>
-                                    </div>
-                                    <div class="col">
-                                        <button id={"c" + (index + 1).toString()} class="btn btn-secondary btn-sm mr-5" onClick={e => {copy(domain + item.key, "c" + (index + 1).toString())}}>Copy</button>
-                                        <button class="btn btn-danger btn-sm" onClick={e => remove(index)}>Remove</button>
+                        {created().length == 0 ? null :
+                        <div class="container p-3 mb-4 shadow rounded">
+                            {created().map((item, index) => (
+                                <div class={(index == created().length - 1) ? "" : "mb-3"}>
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <a href={item.url}>{item.url}</a>
+                                        </div>
+                                        <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
+                                            <a href="/1234">{domain}{item.key}</a>
+                                        </div>
+                                        <div class="col">
+                                            <button id={"c" + (index + 1).toString()} class="btn btn-secondary btn-sm mr-5" onClick={e => {copy(domain + item.key, "c" + (index + 1).toString())}}>Copy</button>
+                                            <button class="btn btn-danger btn-sm" onClick={e => remove(index)}>Remove</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                            
+                        </div>}
                         
-                    </div>}
+                    </div>
                     
                 </div>
+
                 
+                
+
             </div>
-
-            
-            
-
-        </div>
-        
+        </>
     );
 }
 
