@@ -29,6 +29,12 @@ function App() {
             setValid(true)
         }
 
+        const resp = await fetch("localhost:8080/set", {
+            method: "POST",
+            body: JSON.stringify({url: temp})
+        })
+        console.log(resp.json())
+
         
     }
 
