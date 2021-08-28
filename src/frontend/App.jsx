@@ -24,7 +24,7 @@ function App() {
             return
         }
 
-        fetch("http://localhost:8080/set", {
+        fetch("/set", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ function App() {
                                             <a href={item.url}>{item.url}</a>
                                         </div>
                                         <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
-                                            <a href="/1234">{domain}{item.key}</a>
+                                            <a href={"/" + item.key}>{domain}{item.key}</a>
                                         </div>
                                         <div class="col">
                                             <button id={"c" + (index + 1).toString()} class="btn btn-secondary btn-sm mr-5" onClick={e => {copy(domain + item.key, "c" + (index + 1).toString())}}>Copy</button>
