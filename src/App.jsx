@@ -4,10 +4,9 @@ function App() {
     const [created, setCreated] = createSignal([])
     const [valid, setValid] = createSignal(true)
 
-    const re = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z{00a1}{ffff}0-9]+-?)*[a-z{00a1}{ffff}0-9]+)(?:\.(?:[a-z{00a1}{ffff}0-9]+-?)*[a-z{00a1}{ffff}0-9]+)*(?:\.(?:[a-z{00a1}{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/
+    const re = new RegExp("^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z{00a1}{ffff}0-9]+-?)*[a-z{00a1}{ffff}0-9]+)(?:\.(?:[a-z{00a1}{ffff}0-9]+-?)*[a-z{00a1}{ffff}0-9]+)*(?:\.(?:[a-z{00a1}{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$")
 
     let url
-    const key = "1234"
     const domain = "https://mzf.one/"
 
     const registerUrl = async (e) => {
@@ -19,7 +18,10 @@ function App() {
             temp = "http://" + temp
         }
 
-        if (!temp.match(re)) {
+        console.log(temp)
+
+        if (!re.test(temp)) {
+            console.log("broke")
             setValid(false)
             return
         }
@@ -33,6 +35,7 @@ function App() {
         })
         .then(resp => resp.json())
         .then(data => {
+            console.log(data)
             setCreated([{url: temp, key: data.key}, ...created()])
             if (valid() == false) {
                 setValid(true)
@@ -69,6 +72,13 @@ function App() {
         setCreated([...created().splice(index, 1)])
     }
 
+    const truncate = (string, num) => {
+        if (string.length <= num) {
+            return string
+        }
+        return string.slice(0, num) + '...'
+    }
+
     return (
         <>
             <div class="container-lg">
@@ -78,7 +88,7 @@ function App() {
                             mzf.one
                         </h1>
                         <p class="lead custom-font" style="font-size: 1.5rem; font-weight: 400">
-                            A simple, <a href="https://github.com/ppotatoo/rust-api" class="link-primary" style="text-decoration: none">open source</a> privacy respecting url shortner.
+                            A simple, <a href="https://github.com/ppotatoo/rust-api" class="link-primary" style="text-decoration: none">open source</a>, privacy respecting url shortner.
                         </p>
 
                         <form onSubmit={registerUrl}>
@@ -94,7 +104,7 @@ function App() {
                                 <div class={(index == created().length - 1) ? "" : "mb-3"}>
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <a href={item.url}>{item.url}</a>
+                                            <a href={item.url}>{truncate(item.url, 47)}</a>
                                         </div>
                                         <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
                                             <a href={"/" + item.key}>{domain}{item.key}</a>
