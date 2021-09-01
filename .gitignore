@@ -2,6 +2,8 @@ data.*
 .env
 venv/
 __pycache__/
+mzf.one.pem
+mzf.one.key
 
 # Logs
 logs
