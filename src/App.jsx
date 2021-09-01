@@ -85,7 +85,7 @@ function App() {
                             mzf.one
                         </h1>
                         <p class="lead custom-font" style="font-size: 1.5rem; font-weight: 400">
-                            A simple, <a href="https://github.com/ppotatoo/rust-api" class="link-primary" style="text-decoration: none">open source</a>, privacy respecting url shortner.
+                            A simple, <a href="https://github.com/ppotatoo/mzf.one" class="link-primary" style="text-decoration: none">open source</a>, privacy respecting url shortner.
                         </p>
 
                         <form onSubmit={registerUrl}>
