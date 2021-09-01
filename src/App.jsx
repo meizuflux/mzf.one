@@ -4,7 +4,7 @@ function App() {
     const [created, setCreated] = createSignal([])
     const [valid, setValid] = createSignal(true)
 
-    const re = new RegExp(/(http(s)?:\/\/)[-a-zA-Z0-9@:%_\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)
+    const re = new RegExp(/http(s)?:\/\/[-a-zA-Z0-9@:%_\+~#=]{1,256}\.[a-z]{2,6}[-a-zA-Z0-9@:%_\+.~#?&//=]*/)
 
     let url
     const domain = "https://mzf.one/"
