@@ -39,6 +39,7 @@ async def set_url(request: Request) -> JSONResponse:
         return JSONResponse({"message": "No url provided."}, status_code=400)
     
     key = None
+    task = None
     for k, u in cache.items():
         if u == url:
             key = k
