@@ -14,6 +14,10 @@ function App() {
 
         let temp = url.value
 
+        if (temp == "") {
+            temp = "https://example.com"
+        }
+
         if ((!(temp.startsWith("https://") || temp.startsWith("http://")))) {
             temp = "http://" + temp
         }
@@ -32,7 +36,6 @@ function App() {
         })
         .then(resp => resp.json())
         .then(data => {
-            console.log(data)
             setCreated([{url: temp, key: data.key}, ...created()])
             if (valid() == false) {
                 setValid(true)
