@@ -4,6 +4,7 @@ from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
 from starlette.responses import Response, RedirectResponse, JSONResponse
 from starlette.requests import Request
+from starlette.background import BackgroundTask
 
 from databases import Database
 
@@ -47,12 +48,14 @@ async def set_url(request: Request) -> JSONResponse:
         key = "".join(choices(hexdigits, k=5))
         cache[key] = url
 
-    return JSONResponse({"key": key})
+        task = BackgroundTask(add_url, key, url)
+
+
+    return JSONResponse({"key": key}, background=task)
 
 async def get_url(request: Request) -> Optional[RedirectResponse]:
     key = request.path_params["key"]
 
-    print(key)
 
     url = cache.get(key)
     if url is None:
