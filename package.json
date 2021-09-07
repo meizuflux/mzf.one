@@ -9,12 +9,12 @@
     "serve": "vite preview"
   },
   "license": "MIT",
-  "devDependencies": {},
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "^4.0.3",
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
-    "solid-js": "^1.1.1",
     "sass": "^1.38.1",
+    "solid-js": "^1.1.1",
     "vite": "^2.5.0",
     "vite-plugin-solid": "^2.0.1"
   }

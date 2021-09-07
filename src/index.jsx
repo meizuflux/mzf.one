@@ -1,6 +1,3 @@
-import "bootstrap/scss/bootstrap.scss";
-import "./main.css"
-
 import { render } from "solid-js/web";
 
 import App from "./App";

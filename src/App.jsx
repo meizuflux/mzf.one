@@ -1,4 +1,7 @@
-import { createSignal, createEffect } from "solid-js"
+import { createSignal } from "solid-js"
+import "./main.css"
+import "bootstrap/dist/css/bootstrap.css";
+
 
 function App() {
     const [created, setCreated] = createSignal([])
@@ -7,7 +10,6 @@ function App() {
     const re = new RegExp(/http(s)?:\/\/[-a-zA-Z0-9@:%_\+~#=]{1,256}\.[a-z]{2,6}[-a-zA-Z0-9@:%_\+.~#?&//=]*/)
 
     let url
-    const domain = "https://mzf.one/"
 
     const registerUrl = async (e) => {
         e.preventDefault()
@@ -27,7 +29,7 @@ function App() {
             return
         }
 
-        fetch("/set", {
+        fetch("/shorten", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -36,7 +38,7 @@ function App() {
         })
         .then(resp => resp.json())
         .then(data => {
-            setCreated([{url: temp, key: data.key}, ...created()])
+            setCreated([{url: temp, shortened: data.url}, ...created()])
             if (valid() == false) {
                 setValid(true)
             }
@@ -107,10 +109,10 @@ function App() {
                                             <a href={item.url}>{truncate(item.url, 47)}</a>
                                         </div>
                                         <div class="col" style="border-right: 2px solid black; border-left: 2px solid black;">
-                                            <a href={"/" + item.key}>{domain}{item.key}</a>
+                                            <a href={item.shortened}>{item.shortened}</a>
                                         </div>
                                         <div class="col">
-                                            <button id={"c" + (index + 1).toString()} class="btn btn-secondary btn-sm mr-5" onClick={e => {copy(domain + item.key, "c" + (index + 1).toString())}}>Copy</button>
+                                            <button id={"c" + index.toString()} class="btn btn-secondary btn-sm mr-5" onClick={e => {copy(item.shortened, "c" + index.toString())}}>Copy</button>
                                             <button class="btn btn-danger btn-sm" onClick={e => remove(index)}>Remove</button>
                                         </div>
                                     </div>
