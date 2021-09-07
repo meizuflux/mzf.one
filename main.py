@@ -2,7 +2,7 @@ from typing import Optional
 from starlette.applications import Starlette
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
-from starlette.responses import Response, RedirectResponse, JSONResponse
+from starlette.responses import FileResponse, HTMLResponse, Response, RedirectResponse, JSONResponse
 from starlette.requests import Request
 from starlette.background import BackgroundTask
 
@@ -26,13 +26,16 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
+async def index(request: Request):
+    return FileResponse("dist/index.html")
+
 async def add_url(key: str, url: str) -> None:
     query = "INSERT INTO urls (key, url) VALUES (:key, :url)"
     values = {"key": key, "url": url}
     await database.execute(query=query, values=values)
 
 
-async def set_url(request: Request) -> JSONResponse:
+async def shorten_url(request: Request) -> JSONResponse:
     data = await request.json()
     url = data.get("url")
     if url is None:
@@ -52,7 +55,7 @@ async def set_url(request: Request) -> JSONResponse:
         task = BackgroundTask(add_url, key, url)
 
 
-    return JSONResponse({"key": key}, background=task)
+    return JSONResponse({"key": key, "url": request.base_url + key}, background=task)
 
 async def get_url(request: Request) -> Optional[RedirectResponse]:
     key = request.path_params["key"]
@@ -65,9 +68,11 @@ async def get_url(request: Request) -> Optional[RedirectResponse]:
     return RedirectResponse(url)
 
 routes = [
-    Route("/set", endpoint=set_url, methods=["POST"]),
+    Route("/", endpoint=index),
+    Route("/shorten", endpoint=shorten_url, methods=["POST"]),
     Route("/{key}", endpoint=get_url),
-    Mount("/", StaticFiles(directory="dist/", html=True)),
+    Mount("/static", StaticFiles(directory="dist/static")),
+    Mount("/assets", StaticFiles(directory="dist/assets"))
 ]
 
 app = Starlette(
