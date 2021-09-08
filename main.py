@@ -55,7 +55,7 @@ async def shorten_url(request: Request) -> JSONResponse:
         task = BackgroundTask(add_url, key, url)
 
 
-    return JSONResponse({"key": key, "url": request.base_url + key}, background=task)
+    return JSONResponse({"key": key, "url": str(request.base_url) + key}, background=task)
 
 async def get_url(request: Request) -> Optional[RedirectResponse]:
     key = request.path_params["key"]
@@ -68,11 +68,9 @@ async def get_url(request: Request) -> Optional[RedirectResponse]:
     return RedirectResponse(url)
 
 routes = [
-    Route("/", endpoint=index),
     Route("/shorten", endpoint=shorten_url, methods=["POST"]),
     Route("/{key}", endpoint=get_url),
-    Mount("/static", StaticFiles(directory="dist/static")),
-    Mount("/assets", StaticFiles(directory="dist/assets"))
+    Mount("/", StaticFiles(directory="dist/", html=True)),
 ]
 
 app = Starlette(
